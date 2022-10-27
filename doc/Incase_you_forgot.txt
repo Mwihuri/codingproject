@@ -1,0 +1,30 @@
+Incase you forgot how to use Phynix Read the Doc module:
+
+1) To work on the doc repository
+   For a new dir use `` git clone https://github.com/edgehawk/docs.git ``
+   Than run:
+
+   $ git branch --list 
+   $ git checkout <your working branch>
+   $ git branch <new_branch_name if needed>
+
+   https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging
+
+   
+   When finish, commit your changes and checkout back to master and marge the branch
+   $ git checkout master
+   $ git marge <new_branch>
+
+2) For local changes and source control make sure that _templates/versions.html is deleted
+   You can stash this change and discard it before push.
+
+2) Edit the .rst files and at the end run:
+   `` # cd ~/Tools/EH-Docs/docs``
+
+   `make html`                            --> for no versions
+   `sphinx-multiversion ./ _build/html`   --> for version control  
+
+3) Good overview option, run a local web server:
+   `` cd ~/Tools/EH-Docs/docs/_build/html ``
+`` # python3 -m http.server ``
+        Serving HTTP on 0.0.0.0 port 8000 (http://127.0.0.1:8000/) ...

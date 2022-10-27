@@ -1,0 +1,5 @@
+# Sphinx static files
+_build/
+
+# Python venv
+.venv/

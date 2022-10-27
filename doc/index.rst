@@ -1,17 +1,28 @@
-.. this is a comment, it is not rendered
-   when adding new *.rst files, reference them here
-   in this index.rst for them to be rendered and added to the
-   table of contents
 
 
-word-count
-==========
+Welcome to Softeqs Sample User Guide!
+=============================================================
+This is a description of our user guide
 
 .. toctree::
    :maxdepth: 2
-
-   purpose.rst
-   dependencies.rst
-   usage.rst
-   credit.rst
-   exercises.rst
+   :caption: Overview
+      
+   ./Related documentation
+   ./Glossary
+   ./Preface
+   ./Document Sign Off
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: User Guide
+   
+   ./Document Conventions
+   ./Access Restrictions
+   ./Purpose
+   ./Audience
+   ./Introduction
+   ./Coding
+   ./FAQs
+   ./Appendix 
+     

@@ -1,0 +1,85 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: docs
+spec: {}
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: softeq-documentation
+  namespace: docs
+  labels:
+    app: softeq-documentation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: esofteq-documentation
+  template:
+    metadata:
+      labels:
+        app: softeq-documentation
+    spec:
+      imagePullSecrets:
+        - name: image-registry
+      containers:
+        - name: docs
+          image: ${IMAGE_TAG}
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: softeq-documentation
+  namespace: docs
+  labels:
+    app: softeq-documentation
+spec:
+  selector:
+    app: softeq-documentation
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+data: 
+  auth: ZWRnZWhhd2s6JDYkcm91bmRzPTQwOTYkRTZZNUZLMnJJJEZ0T1JJS2ZSdHg1Q1p3cTJBNmhpMncwcGd0ck5ScGJsTnhQckdVRHIubXk0T0ZnUnZxZXR1Z0wxM0dsMlNJY3A2dC9aNGNySjVXWlRkSEVISU54RE8wCnJkYWRtaW46JDYkZlBSLk5Nd0F6dnVPSWF1QiRpdmNWRm5sSGs3VWdLYk00S1UzekRvNFEwVTlSd1VZaG5RZjM1ZVBzWVptVVYzZlpyVTRmcVpSYTVRMGIzWjU4NHpPVk80MWpkZWhKb3E5bjBJdzhKLg0KY2lzY286JDYkR2w2YWhZQmN3a3VaNUlXVSRjeUU4LzNlOFRGSmpnZEhlYTg4djNrTnRSSWVCOUJXNlVvcjJkQW1FaHpYTk55enFPTFJxbzRDUXRzblJwbGVQTGFGdmN0bHA2a1ozU3dIYkdhQm5JMQ0K
+kind: Secret
+metadata:
+  name: basic-auth-peering
+  namespace: docs
+type: Opaque
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: softeq-documentation
+  namespace: docs
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth-peering
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+spec:
+  rules:
+  - host: https://www.softeq.com/
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: softeq-documentation
+            port: 
+              number: 80
+  tls:
+  - secretName: tls-ingress-peering
+    hosts:
+      - https://www.softeq.com/
